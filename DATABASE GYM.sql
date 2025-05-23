@@ -1,6 +1,7 @@
 CREATE DATABASE IF NOT EXISTS `GYM`;
 USE `GYM`;
 
+/*CREACIÓN DE TABLAS*/
 CREATE TABLE `Sede`(
 ID int(11) NOT NULL AUTO_INCREMENT,
 Nombre varchar(70) UNIQUE,
@@ -141,7 +142,7 @@ FOREIGN KEY (IDPersona) REFERENCES Persona(IdenOf) ON DELETE CASCADE ON UPDATE C
 UNIQUE KEY unique_persona_numero (IdenPersona, Numero)
 )ENGINE = INNODB;
 
-CREATE TABLE `Zona-Manten`(
+CREATE TABLE `ZonaXManten`(
 ZonaID INT(11) NOT NULL,
 ZonaSedeID INT(11) NOT NULL,
 MantenimientoID INT(11) NOT NULL,
@@ -160,7 +161,7 @@ INDEX idx_tipo_mant_zona (TipoMantenimientoZ),
 INDEX idx_prioridad_zona (PrioridadZ)
 )ENGINE = INNODB;
 
-CREATE TABLE `Usuario-Clase`(
+CREATE TABLE `UsuarioXClase`(
 CodUserUS int(10) NOT NULL,
 IDSede int(11) NOT NULL,
 IDZona int(11) NOT NULL,
@@ -188,7 +189,7 @@ INDEX idx_zona (IDZona, IDSede),
 INDEX idx_lista_espera (NumeroEnListaEspera)                               
 )ENGINE = INNODB;
 
-CREATE TABLE `Empleado-Clase`(
+CREATE TABLE `EmpleadoXClase`(
 CodEmplEM INT(10) NOT NULL,
 IDClase INT(11) NOT NULL,
 IDZona INT(11) NOT NULL,
@@ -210,7 +211,7 @@ INDEX idx_zona (IDZona, IDSede),
 INDEX idx_fecha_asignacion (FechaAsig)                      
 )ENGINE = INNODB;
 
-CREATE TABLE `Empleado-Manten`(
+CREATE TABLE `EmpleadoXManten`(
 CodEmplEM INT(10) NOT NULL,
 MantenimientoID INT(11) NOT NULL,
 PRIMARY KEY (CodEmplEM, MantenimientoID),
@@ -221,7 +222,7 @@ INDEX idx_empleado (CodEmplEM),
 INDEX idx_mantenimiento (MantenimientoID)
 )ENGINE = INNODB;
 
-CREATE TABLE `Empleado-Equip`(
+CREATE TABLE `EmpleadoXEquip`(
 EquipID INT(11) NOT NULL,
 CodEmplEM INT(10) NOT NULL,
 FechaAsignacion DATE NOT NULL,
@@ -239,7 +240,7 @@ INDEX idx_fecha_asignacion (FechaAsignacion),
 INDEX idx_estado_asignacion (EstadoAsignacion)
 )ENGINE = INNODB;
 
-CREATE TABLE `Equip-Manten`(
+CREATE TABLE `EquipXManten`(
 EquipamientoID INT(11) NOT NULL,
 MantenimientoID INT(11) NOT NULL,
 TipoMantenimiento ENUM('Preventivo', 'Correctivo', 'Predictivo', 'Emergencia') NOT NULL,
@@ -257,7 +258,7 @@ INDEX idx_tipo_mantenimiento (TipoMantenimiento),
 INDEX idx_prioridad (PrioridadMantenimiento)
 )ENGINE = INNODB;
 
-CREATE TABLE `MovInventario-Equip`(
+CREATE TABLE `MovInventarioXEquip`(
  EquipIDRel INT(11) NOT NULL,
  NumMov INT NOT NULL,
  EquipIDMov INT(11) NOT NULL,
@@ -357,6 +358,14 @@ CREATE TABLE `ExpeMedico` (
     FOREIGN KEY (CodCita) REFERENCES cita(Codigo)
 )ENGINE = INNODB;
 
+CREATE TABLE `Lesiones`(
+IDLes INT NOT NULL AUTO_INCREMENT,
+IDCod  INT NOT NULL,
+Lesion varchar(50) NOT NULL,
+PRIMARY KEY (IDLes),
+FOREIGN KEY (IDCod) REFERENCES ExpeMedico(Codigo)
+)ENGINE = INNODB;
+
 CREATE TABLE `cita` (
     Codigo INT AUTO_INCREMENT NOT NULL,
     Fecha DATE NULL,
@@ -379,3 +388,4 @@ CREATE TABLE `MovInventario` (
     FOREIGN KEY (EquipID) REFERENCES Equipamiento(ID) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = INNODB;
 
+/*INSERCIÓN DE DATOS*/
