@@ -59,9 +59,53 @@ LEFT JOIN gym.Persona pe ON ep.IdenPersona = pe.IdenOf
 WHERE emp.ActivoEmple = TRUE OR emp.ActivoEmple IS NULL
 GROUP BY s.IDSede, s.Nombre, s.Ciudad, s.EstadoP
 ORDER BY UtilidadEstimada DESC;
-
-
-
-
-
-
+/* 6 Muestra usuarios activos con sus días de asistencia y frecuencia */
+SELECT CONCAT(p.NombreP, ' ', p.AP) AS Nombre, p.Email, GROUP_CONCAT(DISTINCT da.DiasSem ORDER BY da.DiasSem SEPARATOR ', ') AS Dias_Asistencia, COUNT(a.ID) AS Total_Visitas, MAX(a.Fecha) AS Ultima_Visita FROM gym.Usuario u
+INNER JOIN gym.UsuarioPersona up ON u.CodUser = up.CodUserUS
+INNER JOIN gym.Persona p ON up.IdenPersona = p.IdenOf
+LEFT JOIN gym.DiasAsis da ON u.CodUser = da.CodUserUS
+LEFT JOIN gym.Asistencia a ON u.CodUser = a.CodUserUS
+WHERE p.Activo = TRUE
+GROUP BY u.CodUser
+ORDER BY Total_Visitas DESC;
+/* 7 Muestra clases con cupos disponibles y equipamiento necesario */
+SELECT c.Nombre AS Clase, s.Nombre AS Sede, z.Nombre AS Zona, c.NumPartic AS Capacidad, (c.NumPartic - COUNT(uc.IDClase)) AS Cupos_Disponibles, GROUP_CONCAT(DISTINCT eq.Nombre SEPARATOR ', ') AS Equipamiento_Necesario FROM gym.Clase c
+INNER JOIN gym.Zona z ON c.IDZona = z.ID AND c.IDSede = z.IDSede
+INNER JOIN gym.Sede s ON c.IDSede = s.ID
+LEFT JOIN gym.UsuarioXClase uc ON c.ID = uc.IDClase
+LEFT JOIN gym.ZonaEquipamiento ze ON z.ID = ze.ZonaID AND s.ID = ze.SedeID
+LEFT JOIN gym.Equipamiento eq ON ze.EquipamientoID = eq.ID
+GROUP BY c.ID
+HAVING Cupos_Disponibles > 0;
+/* 8 Lista todo el mantenimiento pendiente con técnicos asignados */
+SELECT eq.Nombre AS Equipo, m.Descripcion, m.Estado, m.FechaInicio, CONCAT(p.NombreP, ' ', p.AP) AS Tecnico, emx.TipoResponsabilidad, s.Nombre AS Sede_Ubicacion FROM gym.Mantenimiento m
+INNER JOIN gym.Equipamiento eq ON m.EquipIDE = eq.ID
+INNER JOIN gym.EmpleadoXManten emx ON m.ID = emx.MantenimientoID
+INNER JOIN gym.Empleado e ON emx.CodEmplEM = e.CodEmpl
+INNER JOIN gym.EmpleadoPersona ep ON e.CodEmpl = ep.CodEmplEM
+INNER JOIN gym.Persona p ON ep.IdenPersona = p.IdenOf
+INNER JOIN gym.ZonaEquipamiento ze ON eq.ID = ze.EquipamientoID
+INNER JOIN gym.Sede s ON ze.SedeID = s.ID
+WHERE m.Estado IN ('Agendado', 'En Proceso')
+ORDER BY m.FechaInicio;
+/* 9 Evalúa instructores basado en asistencia y calificaciones */
+SELECT CONCAT(p.NombreP, ' ', p.AP) AS Instructor, c.Nombre AS Clase, COUNT(ec.IDClase) AS Clases_Impartidas, AVG(uc.Calificacion) AS Puntuacion_Media, COUNT(a.ID) AS Asistencias_Totales FROM gym.EmpleadoXClase ec
+INNER JOIN gym.Empleado e ON ec.CodEmplEM = e.CodEmpl
+INNER JOIN gym.EmpleadoPersona ep ON e.CodEmpl = ep.CodEmplEM
+INNER JOIN gym.Persona p ON ep.IdenPersona = p.IdenOf
+INNER JOIN gym.Clase c ON ec.IDClase = c.ID
+LEFT JOIN gym.UsuarioXClase uc ON c.ID = uc.IDClase
+LEFT JOIN gym.Asistencia a ON c.ID = a.IDClase
+WHERE e.Rol = 'Instructor'
+GROUP BY ec.CodEmplEM, c.ID
+ORDER BY Puntuacion_Media DESC;
+/* 10 Identifica membresías por expirar con datos de contacto */
+SELECT CONCAT(p.NombreP, ' ', p.AP) AS Miembro, p.Email, tp.Numero AS Telefono, m.Nombre AS Membresia, m.FechaVen AS Expiracion, DATEDIFF(m.FechaVen, CURDATE()) AS Dias_Restantes, pa.Metodo AS Ultimo_Pago FROM gym.Membresia m
+INNER JOIN gym.Usuario u ON m.CodUserUS = u.CodUser
+INNER JOIN gym.UsuarioPersona up ON u.CodUser = up.CodUserUS
+INNER JOIN gym.Persona p ON up.IdenPersona = p.IdenOf
+LEFT JOIN gym.TelefonoPersona tp ON p.IdenOf = tp.IDPersona
+LEFT JOIN gym.Pago pa ON m.CodMemb = pa.Memb
+WHERE m.EstadoPlan = 'Activo'
+AND m.FechaVen BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY)
+ORDER BY Dias_Restantes;
