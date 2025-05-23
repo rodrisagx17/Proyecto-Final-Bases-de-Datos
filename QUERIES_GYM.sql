@@ -1,8 +1,14 @@
 /*SIMPLE QUERIES*/
-
-
-
-
+/*#1_ Esta consulta muestra datos especificos que podrian ser relevantes para identificar una Sede*/
+SELECT Nombre, HoraAbre, HoraCierra, Ciudad, EstadoP FROM gym.Sede ORDER BY Ciudad;
+/*#2_ Esta consulta sirve para crear un reporte de asistencias diarias durante una semana en especifico*/
+SELECT a.Fecha, COUNT(a.CodUserUS) AS Asistencias, SUM(CASE WHEN a.Tipo = 'Clase' THEN 1 ELSE 0 END) AS Clases, SUM(CASE WHEN a.Tipo = 'Libre' THEN 1 ELSE 0 END) AS Libre FROM Asistencia a WHERE a.Fecha BETWEEN '2024-01-25' AND '2024-01-31' GROUP BY a.Fecha ORDER BY a.Fecha;
+/*#3_ Esta consulta lista el equipamiento disponible por categoria*/
+SELECT Categoria, Nombre, TipoEquip, CantidadAct, Condicion, UltMantenim FROM gym.Equipamiento WHERE Condicion = 'Disponible' ORDER BY Categoria, Nombre;
+/*#4_ Esta consulta muestra los usuarios registrados en Enero de 2024*/
+SELECT CodUser, Genero, FechaNac, FechaInscrip, HoraInscrip FROM gym.Usuario WHERE FechaInscrip BETWEEN '2024-01-01' AND '2024-01-31' ORDER BY FechaInscrip;
+/*#5_ Esta consulta muestra el equipo que requiere mantenimiento*/
+SELECT Nombre, Categoria, TipoEquip, Condicion, UltMantenim FROM gym.Equipamiento WHERE Condicion = 'En Mantenimiento' ORDER BY UltMantenim;
 
 
 /*MULTITABLE QUERIES*/
