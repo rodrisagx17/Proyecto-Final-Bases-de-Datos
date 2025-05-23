@@ -139,7 +139,7 @@ Numero varchar(20) NOT NULL,
 TipoTelefono ENUM('Movil', 'Casa', 'Trabajo', 'Emergencia') NOT NULL DEFAULT 'Movil',
 PRIMARY KEY (IDTelefonoP),
 FOREIGN KEY (IDPersona) REFERENCES Persona(IdenOf) ON DELETE CASCADE ON UPDATE CASCADE,
-UNIQUE KEY unique_persona_numero (IdenPersona, Numero)
+UNIQUE KEY unique_persona_numero (IDPersona, Numero)
 )ENGINE = INNODB;
 
 CREATE TABLE `ZonaXManten`(
@@ -358,14 +358,6 @@ CREATE TABLE `ExpeMedico` (
     FOREIGN KEY (CodCita) REFERENCES cita(Codigo)
 )ENGINE = INNODB;
 
-CREATE TABLE `Lesiones`(
-IDLes INT NOT NULL AUTO_INCREMENT,
-IDCod  INT NOT NULL,
-Lesion varchar(50) NOT NULL,
-PRIMARY KEY (IDLes),
-FOREIGN KEY (IDCod) REFERENCES ExpeMedico(Codigo)
-)ENGINE = INNODB;
-
 CREATE TABLE `cita` (
     Codigo INT AUTO_INCREMENT NOT NULL,
     Fecha DATE NULL,
@@ -389,3 +381,198 @@ CREATE TABLE `MovInventario` (
 ) ENGINE = INNODB;
 
 /*INSERCIÓN DE DATOS*/
+/*Sede*/
+INSERT INTO Sede(Nombre, HoraAbre, HoraCierra, Calle, Numero, Ciudad, EstadoP, CP) Values('GYM WARRIOR Z25','07:00:00','22:00:00','Zaragoza','#25','Monterrey','Nuevo Leon', 12415);
+INSERT INTO Sede(Nombre, HoraAbre, HoraCierra, Calle, Numero, Ciudad, EstadoP, CP) Values('GYM WARRIOR G38A','06:00:00','22:00:00','Gabriel Bosco','#38A','Monterrey','Nuevo Leon', 12415);
+INSERT INTO Sede(Nombre, HoraAbre, HoraCierra, Calle, Numero, Ciudad, EstadoP, CP) Values('GYM WARRIOR H76','08:00:00','20:00:00','Hidalgo','#76','CDMX','CDMX',134665);
+INSERT INTO Sede(Nombre, HoraAbre, HoraCierra, Calle, Numero, Ciudad, EstadoP, CP) Values('GYM WARRIOR M13B','07:00:00','20:00:00','Miguel Toledo','#13B','Puebla','Puebla',124253);
+INSERT INTO Sede(Nombre, HoraAbre, HoraCierra, Calle, Numero, Ciudad, EstadoP, CP) Values('GYM WARRIOR C12C','06:00:00','21:00:00','Constitucion','#12C','Guadalajara','Jalisco',234242);
+/*Usuario*/
+INSERT INTO Usuario (CodUser, Genero, FechaNac, FechaInscrip, HoraInscrip) VALUES (10001, 'Masculino', '1990-05-15', '2024-01-10', '10:30:00');
+INSERT INTO Usuario (CodUser, Genero, FechaNac, FechaInscrip, HoraInscrip) VALUES (10002, 'Femenino', '1985-08-22', '2024-01-12', '14:15:00');  
+INSERT INTO Usuario (CodUser, Genero, FechaNac, FechaInscrip, HoraInscrip) VALUES (10003, 'Masculino', '1992-12-03', '2024-01-15', '09:45:00'); 
+INSERT INTO Usuario (CodUser, Genero, FechaNac, FechaInscrip, HoraInscrip) VALUES (10004, 'Femenino', '1988-07-18', '2024-01-18', '16:20:00');
+INSERT INTO Usuario (CodUser, Genero, FechaNac, FechaInscrip, HoraInscrip) VALUES (10005, 'Masculino', '1995-03-25', '2024-01-20', '11:10:00');
+/*Empleado*/
+INSERT INTO Empleado (CodEmpl, FechaContrata, salario, HorarTrabajo, ActivoEmple, Rol, Especialidad) VALUES
+(20001, '2023-06-01', 15000.00, '2023-06-01', TRUE, 'Instructor', 'Entrenamiento Funcional'),
+(20002, '2023-07-15', 18000.00, '2023-07-15', TRUE, 'Nutricionista', 'Nutrición Deportiva'),
+(20003, '2023-08-01', 16500.00, '2023-08-01', TRUE, 'Fisioterapeuta', 'Rehabilitación'),
+(20004, '2023-09-10', 14000.00, '2023-09-10', TRUE, 'Recepcionista', 'Atención al Cliente'),
+(20005, '2023-10-05', 20000.00, '2023-10-05', TRUE, 'Gerente', 'Administración');
+/*Equipamiento*/
+INSERT INTO Equipamiento (Nombre, Categoria, TipoEquip, CantidadAct, Condicion, UltMantenim) VALUES
+('Caminadora Profesional', 'Cardio', 'Caminadora', 5, 'Disponible', '2024-01-01'),
+('Bicicleta Estática', 'Cardio', 'Bicicleta', 8, 'Disponible', '2024-01-05'),
+('Rack de Sentadillas', 'Fuerza', 'Rack', 3, 'Disponible', '2024-01-03'),
+('Mancuernas Ajustables', 'Fuerza', 'Pesas', 15, 'Disponible', '2024-01-07'),
+('Colchonetas Yoga', 'Funcional', 'Accesorio', 20, 'En Mantenimiento', '2024-01-10');
+/*Persona*/
+INSERT INTO Persona (IdenOf, NombreP, NombreS, AP, AM, Calle, Numero, Ciudad, EstadoP, CP, Email, Activo, TipoPersona) VALUES
+('CURP001', 'Juan', 'Carlos', 'Pérez', 'García', 'Calle Reforma', '100', 'Guadalajara', 'Jalisco', 44100, 'juan.perez@email.com', TRUE, 'Usuario'),
+('CURP002', 'María', 'Elena', 'López', 'Martínez', 'Calle Hidalgo', '250', 'Zapopan', 'Jalisco', 45120, 'maria.lopez@email.com', TRUE, 'Usuario'),
+('CURP003', 'Pedro', 'Antonio', 'Hernández', 'Rodríguez', 'Av. Revolución', '75', 'Tlaquepaque', 'Jalisco', 45500, 'pedro.hernandez@email.com', TRUE, 'Empleado'),
+('CURP004', 'Ana', 'Sofía', 'González', 'Sánchez', 'Calle Morelos', '180', 'Guadalajara', 'Jalisco', 44630, 'ana.gonzalez@email.com', TRUE, 'Ambos'),
+('CURP005', 'Luis', 'Miguel', 'Ramírez', 'Torres', 'Av. Independencia', '320', 'Zapopan', 'Jalisco', 45040, 'luis.ramirez@email.com', TRUE, 'Empleado');
+/*TelefonoSede*/
+INSERT INTO TelefonoSede (IDSede, Numero) VALUES
+(1, '33-1234-5678'),
+(1, '33-1234-5679'),
+(2, '33-2345-6789'),
+(3, '33-3456-7890'),
+(4, '33-4567-8901');
+/*Zona*/
+INSERT INTO Zona (IDSede, Nombre, Categoria, Condicion, HoraA, HoraC, Fecha) VALUES
+(1, 'Zona Cardio', 'Cardiovascular', 'Disponible', '06:00:00', '22:00:00', '2024-01-15'),
+(1, 'Zona Pesas', 'Fuerza', 'Disponible', '06:00:00', '22:00:00', '2024-01-15'),
+(2, 'Zona Funcional', 'Entrenamiento Funcional', 'Disponible', '05:30:00', '23:00:00', '2024-01-16'),
+(3, 'Zona Yoga', 'Relajación', 'Ocupado', '06:00:00', '21:00:00', '2024-01-17'),
+(4, 'Zona Spinning', 'Cardiovascular', 'Disponible', '07:00:00', '22:30:00', '2024-01-18');
+/*DiasAsis*/
+INSERT INTO DiasAsis (CodUserUS, DiasSem, Activo) VALUES
+(10001, 'L', TRUE),
+(10001, 'X', TRUE),
+(10002, 'M', TRUE),
+(10003, 'J', TRUE),
+(10004, 'V', TRUE);
+/*Membresia*/
+INSERT INTO Membresia (CodMemb, CodUserUS, Nombre, Descripcion, precio, FechaInicio, FechaVen, Descuento, EstadoPlan, NumClassIn, HorasAcceso) VALUES
+(3001, 10001, 'Basica', 'Acceso básico al gimnasio', 500.00, '2024-01-10 10:30:00', '2024-02-10 10:30:00', 0.00, 'Activo', 8, 12),
+(3002, 10002, 'Premium', 'Acceso completo + clases grupaless', 800.00, '2024-01-12 14:15:00', '2024-02-12 14:15:00', 10.00, 'Activo', 15, 16),
+(3003, 10003, 'VIP', 'Acceso total + entrenador personal', 900.00, '2024-01-15 09:45:00', '2024-02-15 09:45:00', 5.00, 'Activo', 20, 24),
+(3004, 10004, 'Basica', 'Acceso básico al gimnasios', 500.00, '2024-01-18 16:20:00', '2024-02-18 16:20:00', 0.00, 'Activo', 8, 12),
+(3005, 10005, 'Premium', 'Acceso completo + clases grupales', 800.00, '2024-01-20 11:10:00', '2024-02-20 11:10:00', 15.00, 'Activo', 15, 16);
+
+/*UsuarioPersona*/
+INSERT INTO UsuarioPersona (CodUserUS, IdenPersona, FechaVinculacion) VALUES
+(10001, 'CURP001', '2024-01-10'),
+(10002, 'CURP002', '2024-01-12'),
+(10003, 'CURP004', '2024-01-15'),
+(10004, 'CURP004', '2024-01-18'),
+(10005, 'CURP005', '2024-01-20');
+/*EmpleadoPersona*/
+INSERT INTO EmpleadoPersona (CodEmplEM, IdenPersona, FechaVinculacion) VALUES
+(20001, 'CURP003', '2023-06-01'),
+(20002, 'CURP005', '2023-07-15'),
+(20003, 'CURP004', '2023-08-01'),
+(20004, 'CURP001', '2023-09-10'),
+(20005, 'CURP002', '2023-10-05');
+/*TelefonoPersona*/
+INSERT INTO TelefonoPersona (IDPersona, Numero, TipoTelefono) VALUES
+('CURP001', '33-1111-1111', 'Movil'),
+('CURP002', '33-2222-2222', 'Casa'),
+('CURP003', '33-3333-3333', 'Trabajo'),
+('CURP004', '33-4444-4444', 'Movil'),
+('CURP005', '33-5555-5555', 'Emergencia');
+
+/*Mantenimiento*/
+INSERT INTO Mantenimiento (EquipIDE, Descripcion, FechaInicio, FechaFin, HoraInicio, HoraFin, Estado, ComentAdi) VALUES
+(1, 'Mantenimiento preventivo caminadora', '2024-01-15', '2024-01-15', '08:00:00', '10:00:00', 'Terminado', 'Cambio de aceite y calibración'),
+(2, 'Reparación de pedales', '2024-01-20', '2024-01-21', '14:00:00', '16:00:00', 'En Proceso', 'Reemplazo de pedales dañados'),
+(3, 'Inspección de seguridad', '2024-01-25', '2024-01-25', '09:00:00', '11:00:00', 'Agendado', 'Revisión de barras y seguros'),
+(4, 'Limpieza profunda', '2024-01-30', '2024-01-30', '07:00:00', '09:00:00', 'Agendado', 'Desinfección y pulido'),
+(5, 'Reparación de cremalleras', '2024-02-01', '2024-02-02', '13:00:00', '15:00:00', 'Agendado', 'Cambio de cremalleras defectuosas');
+/*MovInventario*/
+INSERT INTO MovInventario (EquipID, TipMov, Cantidad, Fecha, Descripcion) VALUES
+(1, 'Entrada', 2, '2024-01-01 10:00:00', 'Compra de nuevas caminadoras'),
+(2, 'Entrada', 3, '2024-01-05 14:30:00', 'Adquisición de bicicletas adicionales'),
+(3, 'Salida', 1, '2024-01-10 09:15:00', 'Rack enviado a mantenimiento externo'),
+(4, 'Transferencia', 5, '2024-01-12 11:45:00', 'Transferencia entre sedes'),
+(5, 'Entrada', 10, '2024-01-15 16:20:00', 'Reposición de colchonetas');
+
+/*cita*/
+INSERT INTO cita (Fecha, Hora, IDSede, CodUserUS) VALUES
+('2024-01-25', '10:00:00', 1, 10001),
+('2024-01-26', '11:30:00', 2, 10002),
+('2024-01-27', '14:00:00', 1, 10003),
+('2024-01-28', '16:15:00', 3, 10004),
+('2024-01-29', '09:45:00', 4, 10005);
+/*ZonaEquipamiento*/
+INSERT INTO ZonaEquipamiento (ZonaID, SedeID, EquipamientoID, FechaAsignacion, EstadoAsignacion) VALUES
+(1, 1, 1, '2024-01-15', 'Activo'),
+(1, 1, 2, '2024-01-15', 'Activo'),
+(2, 1, 3, '2024-01-16', 'Activo'),
+(3, 2, 4, '2024-01-17', 'Activo'),
+(4, 3, 5, '2024-01-18', 'Mantenimiento');
+
+/*Clase*/
+INSERT INTO Clase (IDZona, IDSede, Nombre, Descripcion, NumPartic, Fecha, HoraInicio, HoraFin) VALUES
+(1, 1, 'Cardio Matutino', 'Clase de cardio para principiantes', 15, '2024-01-25', '07:00:00', '08:00:00'),
+(2, 1, 'Fuerza Avanzada', 'Entrenamiento de fuerza para nivel avanzado', 10, '2024-01-25', '18:00:00', '19:30:00'),
+(3, 2, 'Funcional Cross', 'Entrenamiento funcional de alta intensidad', 12, '2024-01-26', '19:00:00', '20:00:00'),
+(4, 3, 'Yoga Relajante', 'Sesión de yoga para relajación y flexibilidad', 20, '2024-01-27', '10:00:00', '11:30:00'),
+(5, 4, 'Spinning Extremo', 'Clase de spinning de alta intensidad', 18, '2024-01-28', '20:00:00', '21:00:00');
+/*ExpeMedico*/
+INSERT INTO ExpeMedico (Fecha, Hora, Resultados, Tipo, Objetivos, CodEmplEM, CodCita, ZonasRecom, Lesiones) VALUES
+('2024-01-25', '10:30:00', 'Excelente condición', 'Evaluación Inicial', 'Ganar Masa Muscular', 20002, 1, 'Zona Pesas', 'Ninguna'),
+('2024-01-26', '12:00:00', 'Sobrepeso leve', 'Evaluación Nutricional', 'Bajar de Peso', 20002, 2, 'Zona Cardio', 'Dolor rodilla izquierda'),
+('2024-01-27', '14:30:00', 'Buena resistencia', 'Evaluación Física', 'Mantener Peso', 20003, 3, 'Zona Funcional', 'Ninguna'),
+('2024-01-28', '16:45:00', 'Flexibilidad limitada', 'Evaluación Postural', 'Ganar Masa Muscular', 20003, 4, 'Zona Yoga', 'Lumbalgia'),
+('2024-01-29', '10:15:00', 'Cardio deficiente', 'Evaluación Cardiovascular', 'Bajar de Peso', 20002, 5, 'Zona Spinning', 'Ninguna');
+
+/*Pago*/
+INSERT INTO Pago (Folio, CodUserUS, CodEmplEM, Memb, Monto, MontoRe, MontoAdeu, FechaPago, Hora, Metodo, TipoPago, Concepto, EstadoPago, DetallesAdi, FechUltPago) VALUES
+(1001, 10001, 20004, 3001, 500.00, 500.00, 0.00, '2024-01-10', '10:45:00', 'Efectivo', 'Mensual', 'Pago mensualidad enero', 'Completado', 'Pago completo', '2024-01-10'),
+(1002, 10002, 20004, 3002, 800.00, 720.00, 0.00, '2024-01-12', '14:30:00', 'Credito', 'Mensual', 'Pago mensualidad enero con descuento', 'Completado', 'Descuento aplicado', '2024-01-12'),
+(1003, 10003, 20004, 3003, 1200.00, 1140.00, 0.00, '2024-01-15', '10:00:00', 'Transferencia', 'Mensual', 'Pago mensualidad enero VIP', 'Completado', 'Descuento fidelidad', '2024-01-15'),
+(1004, 10004, 20004, 3004, 500.00, 250.00, 250.00, '2024-01-18', '16:35:00', 'Debito', 'Quincenal', 'Pago parcial enero', 'Pendiente', 'Pendiente segunda quincena', '2024-01-18'),
+(1005, 10005, 20004, 3005, 800.00, 680.00, 0.00, '2024-01-20', '11:25:00', 'Efectivo', 'Mensual', 'Pago mensualidad enero premium', 'Completado', 'Descuento estudiante', '2024-01-20');
+/*Asistencia*/
+INSERT INTO Asistencia (CodUserUS, IDClase, IDZona, IDSede, Fecha, HoraEntrada, HoraSalida, Tipo) VALUES
+(10001, 1, 1, 1, '2024-01-25', '06:55:00', '08:05:00', 'Clase'),
+(10002, 2, 2, 1, '2024-01-25', '17:55:00', '19:35:00', 'Clase'),
+(10003, NULL, 3, 2, '2024-01-26', '10:00:00', '11:30:00', 'Libre'),
+(10004, 4, 4, 3, '2024-01-27', '09:55:00', '11:35:00', 'Clase'),
+(10005, 5, 5, 4, '2024-01-28', '19:55:00', '21:05:00', 'Clase');
+
+/*ZonaXManten*/
+INSERT INTO `Zona-Manten` (ZonaID, ZonaSedeID, MantenimientoID, TipoMantenimientoZ, PrioridadZ, TiempoEstZ, CostoEstZ, FechaAsignacion) VALUES
+(1, 2, 2, 'Limpieza', 'Media', 2.00, 150.00, '2024-01-15 08:00:00'),
+(2, 1, 2, 'Revision', 'Alta', 1.50, 200.00, '2024-01-20 14:00:00'),
+(3, 2, 3, 'Reparacion', 'Urgente', 3.00, 500.00, '2024-01-25 09:00:00'),
+(4, 3, 4, 'Limpieza', 'Baja', 1.00, 100.00, '2024-01-30 07:00:00'),
+(5, 4, 5, 'Actualizacion', 'Media', 4.00, 300.00, '2024-02-01 13:00:00');
+/*UsuarioXClase*/
+INSERT INTO `Usuario-Clase` (CodUserUS, IDSede, IDZona, IDClase, Estado, FechaIns, FechaConfirmacion, NumeroEnListaEspera, Observaciones, Calificacion) VALUES
+(10001, 1, 1, 1, 'Asistió', '2024-01-20 10:30:00', '2024-01-24 18:00:00', NULL, 'Excelente participación', 5),
+(10002, 1, 2, 2, 'Asistió', '2024-01-21 14:15:00', '2024-01-24 19:00:00', NULL, 'Buen desempeño', 4),
+(10003, 2, 3, 3, 'Confirmado', '2024-01-22 09:45:00', '2024-01-25 10:00:00', NULL, 'Primera clase', NULL),
+(10004, 3, 4, 4, 'Inscrito', '2024-01-23 16:20:00', NULL, NULL, 'Interesada en yoga', NULL),
+(10005, 4, 5, 5, 'En Lista de Espera', '2024-01-24 11:10:00', NULL, 3, 'Clase llena', NULL);
+
+/*EmpleadoXClase*/
+INSERT INTO EmpleadoXClase (CodEmplEM, IDClase, IDZona, IDSede, FechaAsig, FechaFinAsign, Observaciones, TarifaXClase) VALUES
+(20001, 1, 1, 1, '2024-01-15 10:00:00', NULL, 'Instructor principal cardio', 200.00),
+(20001, 2, 2, 1, '2024-01-15 10:00:00', NULL, 'Instructor fuerza avanzada', 250.00),
+(20002, 3, 3, 2, '2024-01-16 14:00:00', NULL, 'Instructor funcional', 220.00),
+(20003, 4, 4, 3, '2024-01-17 09:00:00', NULL, 'Instructor yoga certificado', 180.00),
+(20001, 5, 5, 4, '2024-01-18 16:00:00', NULL, 'Instructor spinning', 200.00);
+/*EmpleadoXManten*/
+INSERT INTO EmpleadoXManten (CodEmplEM, MantenimientoID) VALUES
+(20005, 1),
+(20001, 2),
+(20005, 3),
+(20004, 4),
+(20001, 5);
+/*EmpleadoXEquip*/
+INSERT INTO EmpleadoXEquip (EquipID, CodEmplEM, FechaAsignacion, TipoResponsabilidad, FechaInicio, FechaFin, EstadoAsignacion, Comentarios) VALUES
+(1, 20001, '2024-01-15', 'Mantenimiento', '2024-01-15', NULL, 'Activa', 'Responsable de caminadoras'),
+(2, 20001, '2024-01-16', 'Operacion', '2024-01-16', NULL, 'Activa', 'Supervisión de bicicletas'),
+(3, 20005, '2024-01-17', 'Supervision', '2024-01-17', NULL, 'Activa', 'Control de racks de pesas'),
+(4, 20004, '2024-01-18', 'Limpieza', '2024-01-18', NULL, 'Activa', 'Limpieza de mancuernas'),
+(5, 20003, '2024-01-19', 'Mantenimiento', '2024-01-19', '2024-02-02', 'Completada', 'Reparación de colchonetas terminada');
+
+/*Equip-Manten*/
+INSERT INTO EquipXManten (EquipamientoID, MantenimientoID, TipoMantenimiento, PrioridadMantenimiento, CostoEstimado, TiempoEstimado, FechaAsignacion) VALUES
+(1, 1, 'Preventivo', 'Media', 200.00, 2, '2024-01-15 08:00:00'),
+(2, 2, 'Correctivo', 'Alta', 350.00, 4, '2024-01-20 14:00:00'),
+(3, 3, 'Preventivo', 'Baja', 150.00, 2, '2024-01-25 09:00:00'),
+(4, 4, 'Preventivo', 'Media', 100.00, 1, '2024-01-30 07:00:00'),
+(5, 5, 'Correctivo', 'Critica', 500.00, 8, '2024-02-01 13:00:00');
+/*MovInventarioXEquip*/
+INSERT INTO MovInventarioXEquip (EquipIDRel, NumMov, EquipIDMov) VALUES
+(1, 1, 1),
+(2, 2, 2),
+(3, 3, 3),
+(4, 4, 4),
+(5, 5, 5);
